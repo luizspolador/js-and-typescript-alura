@@ -21,6 +21,11 @@ let tempoDecorridoEmSegundos = 5
 let intervaloId = null
 const iniciarPausaBt = document.querySelector('#start-pause')
 
+const iniciarOuPausarBt = document.querySelector('#start-pause span')
+const imgComecarOuPausar = document.querySelector('.app__card-primary-butto-icon')
+
+const tempoNaTela = document.querySelector('#timer')
+
 musicaFocoInput.addEventListener('change', () => {
   if(musica.paused){
     musica.play()
@@ -80,28 +85,39 @@ function alterarContexto(contexto){
 
 const contagemRegressiva = () => {
   if(tempoDecorridoEmSegundos <= 0){
-    audioTempoFinalizado.play()
-    zerar()
+    audioTempoFinalizado.play()    
     alert('Tempo finalizado!')
+    zerar()
     return
   }
   tempoDecorridoEmSegundos -= 1
-  console.log('Temporizador: ' + tempoDecorridoEmSegundos)
+  mostrarTempo()
 }
 
 iniciarPausaBt.addEventListener('click', iniciarOuPausar)
 
 function iniciarOuPausar() {
   if(intervaloId){
+    imgComecarOuPausar.setAttribute('src', `/imagens/play_arrow.png`)
     audioPausa.play()
     zerar()
     return
   }
   audioPlay.play();
+  imgComecarOuPausar.setAttribute('src', `/imagens/pause.png`)
   intervaloId = setInterval(contagemRegressiva, 1000)
+  iniciarOuPausarBt.textContent = "Pausar"
 }
 
 function zerar() {
   clearInterval(intervaloId)
+  iniciarOuPausarBt.textContent = "Começar"
   intervaloId = null
 }
+
+function mostrarTempo(){
+  const tempo = tempoDecorridoEmSegundos
+  tempoNaTela.innerHTML = `${tempo}`
+}
+
+mostrarTempo()
